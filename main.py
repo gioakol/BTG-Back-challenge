@@ -19,10 +19,12 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+# Creación routing
 app.include_router(routes_clients, prefix="/clients")
 app.include_router(routes_funds, prefix="/funds")
 app.include_router(routes_transactions, prefix="/transactions")
 app.include_router(routes_clientsTransactions, prefix="/clientsTransactions")
 app.include_router(routes_email, prefix="/email")
 
+# Validación objetos de base de datos DynamoBD
 Validate_Schema()

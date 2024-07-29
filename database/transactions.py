@@ -8,6 +8,15 @@ from utils.mailSender import sendMailNotificationSubscribe
 
 table = dynamodb.Table("Transactions")
 
+
+
+# Create a new transaction.
+#
+# Parameters:
+# * data (Transaction): The transaction data to be created.
+#
+# Returns:
+# * JSONResponse: Success message if the transaction is created successfully, or an error message if there are insufficient funds or if a server error occurs.
 def createTransaction(data: Transaction):
     try:
         from .clientsTransactions import getAllInfoClientById
@@ -38,6 +47,13 @@ def createTransaction(data: Transaction):
         return JSONResponse(content=ex.response["Error"], status_code=500)
     
 
+# Update an existing transaction.
+#
+# Parameters:
+# * data (Transaction): The transaction data to be updated.
+#
+# Returns:
+# * JSONResponse: Success message if the transaction is updated successfully, or an error message if the transaction is not found or if a server error occurs.
 def updateTransaction(data: Transaction):
     try:
         from .clientsTransactions import getAllInfoClientById
@@ -71,6 +87,15 @@ def updateTransaction(data: Transaction):
         return JSONResponse(content={"error": str(ex)}, status_code=500)
 
 
+# Retrieve transactions by client ID.
+#
+# Parameters:
+# * idClient (str): The unique identifier of the client.
+# * allTransactions (bool): When True, retrieves all transactions. When False, retrieves only active transactions.
+#
+# Returns:
+# * list: A list of transactions for the specified client.
+# * JSONResponse: Error response with status code 500 if a server error occurs.
 def getTransactionsByIdClient(idClient: str, allTransactions: bool):
     try:
         key_condition = Key("idClient").eq(idClient)
@@ -93,6 +118,17 @@ def getTransactionsByIdClient(idClient: str, allTransactions: bool):
     except ClientError as ex:
         return JSONResponse(content=ex.response["Error"], status_code=500)
 
+
+# Retrieve transactions by client ID and cancellation status.
+#
+# Parameters:
+# * idClient (str): The unique identifier of the client.
+# * idFund (str): The unique identifier of the fund.
+# * isCanceled (bool): The cancellation status of the transaction.
+#
+# Returns:
+# * list: A list of transactions for the specified client and fund with the given cancellation status.
+# * JSONResponse: Error response with status code 500 if a server error occurs.
 def getTransactionsByIdClientByIsCanceled(idClient: str, idFund: str, isCanceled: bool):
     try:
         response = table.query(

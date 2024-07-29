@@ -4,6 +4,16 @@ from fastapi.responses import JSONResponse
 
 table = dynamodb.Table("Clients")
 
+
+
+# Retrieve client data by client ID.
+#
+# Parameters:
+# * idClient (str): The unique identifier of the client.
+#
+# Returns:
+# * dict: Client data if found.
+# * JSONResponse: Error response with status code 404 if the client is not found, or 500 if a server error occurs.
 def getClientById(idClient: str):
     try:
         response = table.get_item(
