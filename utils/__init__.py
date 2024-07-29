@@ -1,0 +1,1 @@
+from .suscribeMail import subscribeClientMail, validateSubscribe
