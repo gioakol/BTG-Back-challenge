@@ -1,6 +1,7 @@
 from os import getenv
 from boto3 import resource
 from botocore.exceptions import ClientError
+from decimal import Decimal
 
 dynamodb = resource("dynamodb",
                     aws_access_key_id=getenv("AWS_ACCESS_KEY_ID"),
@@ -144,11 +145,11 @@ def Insert_Table_Funds():
         funds_table = dynamodb.Table('Funds')
 
         funds = [
-            {"idFund": "1", "name": "FPV_BTG_PACTUAL_RECAUDADORA", "minimumAmount": 75000, "category": "FPV"},
-            {"idFund": "2", "name": "FPV_BTG_PACTUAL_ECOPETROL", "minimumAmount": 125000, "category": "FPV"},
-            {"idFund": "3", "name": "DEUDAPRIVADA", "minimumAmount": 50000, "category": "FIC"},
-            {"idFund": "4", "name": "FDO-ACCIONES", "minimumAmount": 250000, "category": "FIC"},
-            {"idFund": "5", "name": "FPV_BTG_PACTUAL_DINAMICA", "minimumAmount": 100000, "category": "FPV"}
+            {"idFund": "1", "name": "FPV_BTG_PACTUAL_RECAUDADORA", "minimumAmount": Decimal('75000'), "category": "FPV"},
+            {"idFund": "2", "name": "FPV_BTG_PACTUAL_ECOPETROL", "minimumAmount": Decimal('125000'), "category": "FPV"},
+            {"idFund": "3", "name": "DEUDAPRIVADA", "minimumAmount": Decimal('50000'), "category": "FIC"},
+            {"idFund": "4", "name": "FDO-ACCIONES", "minimumAmount": Decimal('250000'), "category": "FIC"},
+            {"idFund": "5", "name": "FPV_BTG_PACTUAL_DINAMICA", "minimumAmount": Decimal('100000'), "category": "FPV"}
         ]
 
         for fund in funds:
