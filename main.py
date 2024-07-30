@@ -8,7 +8,7 @@ app = FastAPI()
 
 # Configuración de CORS
 origins = [
-    getenv("AWS_MAIL_TOPIC_ARN")
+    getenv("CORS_ORIGIN")
 ]
 
 app.add_middleware(
