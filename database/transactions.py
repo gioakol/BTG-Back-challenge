@@ -5,6 +5,7 @@ from botocore.exceptions import ClientError
 from fastapi.responses import JSONResponse
 from models.transaction import Transaction
 from utils.mailSender import sendMailNotificationSubscribe
+from decimal import Decimal
 
 table = dynamodb.Table("Transactions")
 
@@ -24,25 +25,33 @@ def createTransaction(data: Transaction):
         idClient = str(data.idClient)
         idFund = str(data.idFund)
 
+        print(1)
         client_data = getAllInfoClientById(idClient, False)
         fund_data = getFundById(idFund)
-
+        
+        print(2)
         avaiableAmount = client_data.get('avaiableAmount', 0)
-        fundAmount = fund_data.get('minimumAmount', 0)
+        
+        print(data.investedAmount)
+        print(avaiableAmount)
+        print(data.investedAmount <= avaiableAmount)
+        
+        if data.investedAmount <= avaiableAmount: 
+            print(3)
+            print(data.investedAmount)
 
-        if fundAmount <= avaiableAmount:
             transaction = data.dict()
             table.put_item(Item=transaction)
 
             res = sendMailNotificationSubscribe(client_data.get('fullName', 0), client_data.get('email', 0), client_data.get('phone', 0), fund_data.get('category', 0), fund_data.get('name', 0), "subscribed")
-            
+                
             if res == True:
                 return JSONResponse(content={"message": f"Se ha suscrito exitosamente al {"Fondo voluntario de pensión" if fund_data.get('category', 0) == "FPV" else "Fondo de inversión colectiva"} '{fund_data.get('name', 0)}', se te ha enviado un correo con la confirmación de la transacción."}, status_code=200)
             else:
                 return JSONResponse(content={"message": f"Se ha suscrito exitosamente al {"Fondo voluntario de pensión" if fund_data.get('category', 0) == "FPV" else "Fondo de inversión colectiva"} '{fund_data.get('name', 0)}', no hemos podido enviarte un correo con la confirmación de la transacción."}, status_code=200)
         else:
-            return JSONResponse(content={"message": f"No tiene saldo disponible para vincularse al {"Fondo voluntario de pensión" if fund_data.get('category', 0) == "FPV" else "Fondo de inversión colectiva"} '{fund_data.get('name', 0)}' ({avaiableAmount})."}, status_code=401)
-            
+            print(4)
+            return JSONResponse(content={"message": f"No tiene saldo disponible para vincularse al {"Fondo voluntario de pensión" if fund_data.get('category', 0) == "FPV" else "Fondo de inversión colectiva"} '{fund_data.get('name', 0)}'."}, status_code=401)
     except ClientError as ex:
         return JSONResponse(content=ex.response["Error"], status_code=500)
     
