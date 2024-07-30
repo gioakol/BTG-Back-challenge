@@ -32,10 +32,6 @@ def createTransaction(data: Transaction):
         print(2)
         avaiableAmount = client_data.get('avaiableAmount', 0)
         
-        print(data.investedAmount)
-        print(avaiableAmount)
-        print(data.investedAmount <= avaiableAmount)
-        
         if data.investedAmount <= avaiableAmount: 
             print(3)
             print(data.investedAmount)
