@@ -1,5 +1,5 @@
 from fastapi import APIRouter
-from database.clients import getClientById
+from app.database.clients import getClientById
 
 routes_clients = APIRouter()
 

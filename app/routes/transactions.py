@@ -1,6 +1,6 @@
 from fastapi import APIRouter
-from database.transactions import createTransaction, updateTransaction
-from models.transaction import Transaction
+from app.database.transactions import createTransaction, updateTransaction
+from app.models.transaction import Transaction
 
 routes_transactions = APIRouter()
 

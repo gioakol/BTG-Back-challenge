@@ -1,6 +1,6 @@
 from os import getenv
 from connection import sns_client
-from database.clients import getClientById
+from app.database.clients import getClientById
 from fastapi.responses import JSONResponse
 from botocore.exceptions import ClientError
 
