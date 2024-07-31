@@ -1,6 +1,8 @@
-from .db import dynamodb
+from app.database.db import dynamodb
 from botocore.exceptions import ClientError
 from fastapi.responses import JSONResponse
+from fastapi import HTTPException
+
 
 table = dynamodb.Table("Clients")
 
@@ -25,4 +27,4 @@ def getClientById(idClient: str):
 
         return response["Item"]    
     except ClientError as ex:
-        return JSONResponse(content = ex.response["Error"], status_code = 500)
+        raise HTTPException(status_code=500, detail="Internal Server Error")

@@ -1,8 +1,8 @@
 from os import getenv
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from routes import routes_transactions, routes_clients, routes_funds, routes_clientsTransactions, routes_email
-from database.db import Validate_Schema
+from app.routes import routes_transactions, routes_clients, routes_funds, routes_clientsTransactions, routes_email
+from app.database.db import Validate_Schema
 
 app = FastAPI()
 

@@ -1,6 +1,6 @@
-from .transactions import getTransactionsByIdClient
-from .funds import getAllFunds
-from .clients import getClientById
+from app.database.transactions import getTransactionsByIdClient
+from app.database.clients import getClientById
+
 from botocore.exceptions import ClientError
 from fastapi.responses import JSONResponse
 from decimal import Decimal

@@ -1,6 +1,6 @@
 from fastapi import APIRouter
-from database.clientsTransactions import getAllInfoClientById
-from models.transaction import Transaction
+from app.database.clientsTransactions import getAllInfoClientById
+from app.models.transaction import Transaction
 
 routes_clientsTransactions = APIRouter()
 
