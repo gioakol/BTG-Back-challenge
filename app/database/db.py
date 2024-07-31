@@ -1,12 +1,9 @@
-from os import getenv
-from boto3 import resource
+from connection import dynamodb
+
 from botocore.exceptions import ClientError
 from decimal import Decimal
 
-dynamodb = resource("dynamodb",
-                    aws_access_key_id=getenv("AWS_ACCESS_KEY_ID"),
-                    aws_secret_access_key=getenv("AWS_SECRET_ACCESS_KEY"),
-                    region_name=getenv("REGION_NAME"))
+
 
 # Check if a table exists in DynamoDB.
 #
@@ -82,7 +79,7 @@ def Insert_Table_Clients():
             'idClient': '1', 
             'fullName': 'Giovanni Beltran Avila', 
             'email': 'gioakol@gmail.com',
-            'phone': '+573229702531',
+            'phone': '+57 3229702531',
             'amount': 500000
         }
 
@@ -274,5 +271,5 @@ def Validate_Schema():
                 Insert_Table_Funds()
         if not table_exists("Transactions"):
             res = Create_Table_Transactions()
-    else:
-        print('Schema updated')
+    #else:
+    #    print('Schema updated')

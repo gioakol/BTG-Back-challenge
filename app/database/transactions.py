@@ -1,11 +1,12 @@
-from .db import dynamodb
-from .funds import getFundById
+from app.database.db import dynamodb
+from app.database.funds import getFundById
+
+from app.utils.mailSender import sendMailNotificationSubscribe
+from app.models.transaction import Transaction
+
 from boto3.dynamodb.conditions import Key, Attr
 from botocore.exceptions import ClientError
 from fastapi.responses import JSONResponse
-from models.transaction import Transaction
-from utils.mailSender import sendMailNotificationSubscribe
-from decimal import Decimal
 
 table = dynamodb.Table("Transactions")
 
@@ -25,16 +26,12 @@ def createTransaction(data: Transaction):
         idClient = str(data.idClient)
         idFund = str(data.idFund)
 
-        print(1)
         client_data = getAllInfoClientById(idClient, False)
         fund_data = getFundById(idFund)
         
-        print(2)
         avaiableAmount = client_data.get('avaiableAmount', 0)
         
         if data.investedAmount <= avaiableAmount: 
-            print(3)
-            print(data.investedAmount)
 
             transaction = data.dict()
             table.put_item(Item=transaction)
@@ -46,7 +43,6 @@ def createTransaction(data: Transaction):
             else:
                 return JSONResponse(content={"message": f"Se ha suscrito exitosamente al {"Fondo voluntario de pensión" if fund_data.get('category', 0) == "FPV" else "Fondo de inversión colectiva"} '{fund_data.get('name', 0)}', no hemos podido enviarte un correo con la confirmación de la transacción."}, status_code=200)
         else:
-            print(4)
             return JSONResponse(content={"message": f"No tiene saldo disponible para vincularse al {"Fondo voluntario de pensión" if fund_data.get('category', 0) == "FPV" else "Fondo de inversión colectiva"} '{fund_data.get('name', 0)}'."}, status_code=401)
     except ClientError as ex:
         return JSONResponse(content=ex.response["Error"], status_code=500)

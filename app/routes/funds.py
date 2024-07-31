@@ -1,6 +1,6 @@
 
 from fastapi import APIRouter
-from database.funds import getAllFunds
+from app.database.funds import getAllFunds
 
 routes_funds = APIRouter()
 

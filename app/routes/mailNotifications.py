@@ -1,5 +1,5 @@
 from fastapi import APIRouter
-from utils import subscribeClientMail, validateSubscribe
+from app.utils import subscribeClientMail, validateSubscribe
 
 routes_email = APIRouter()
 
