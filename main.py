@@ -3,6 +3,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from app.routes import routes_transactions, routes_clients, routes_funds, routes_clientsTransactions, routes_email
 from app.database.db import Validate_Schema
+from awsSecrets import update_env_file
 
 app = FastAPI()
 
@@ -25,6 +26,9 @@ app.include_router(routes_funds, prefix="/funds")
 app.include_router(routes_transactions, prefix="/transactions")
 app.include_router(routes_clientsTransactions, prefix="/clientsTransactions")
 app.include_router(routes_email, prefix="/email")
+
+# Actualización de objetos en .env
+update_env_file()
 
 # Validación objetos de base de datos DynamoBD
 Validate_Schema()

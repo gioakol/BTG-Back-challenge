@@ -1,0 +1,125 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Description: Template to deploy FastAPI on EC2 with environment variables
+
+Resources:
+  VpcBtgApi:
+    Type: "AWS::EC2::VPC"
+    Properties:
+      CidrBlock: "10.0.0.0/16"
+      EnableDnsSupport: "true"
+      EnableDnsHostnames: "true"
+      Tags:
+        - Key: "Name"
+          Value: "VpcBtgApi"
+
+  SubnetBtgApi:
+    Type: "AWS::EC2::Subnet"
+    Properties:
+      VpcId: !Ref VpcBtgApi
+      CidrBlock: "10.0.1.0/24"
+      MapPublicIpOnLaunch: "true"
+      AvailabilityZone: !Select [ 0, !GetAZs "" ]
+      Tags:
+        - Key: "Name"
+          Value: "SubnetBtgApi"
+
+  InternetGatewayBtgApi:
+    Type: "AWS::EC2::InternetGateway"
+    Properties:
+      Tags:
+        - Key: "Name"
+          Value: "InternetGatewayBtgApi"
+
+  AttachGateway:
+    Type: "AWS::EC2::VPCGatewayAttachment"
+    Properties:
+      VpcId: !Ref VpcBtgApi
+      InternetGatewayId: !Ref InternetGatewayBtgApi
+
+  RouteTableBtgApi:
+    Type: "AWS::EC2::RouteTable"
+    Properties:
+      VpcId: !Ref VpcBtgApi
+      Tags:
+        - Key: "Name"
+          Value: "RouteTableBtgApi"
+
+  RouteBtgApi:
+    Type: "AWS::EC2::Route"
+    DependsOn: AttachGateway
+    Properties:
+      RouteTableId: !Ref RouteTableBtgApi
+      DestinationCidrBlock: "0.0.0.0/0"
+      GatewayId: !Ref InternetGatewayBtgApi
+
+  SubnetRouteTableBtgApiAssociation:
+    Type: "AWS::EC2::SubnetRouteTableAssociation"
+    Properties:
+      SubnetId: !Ref SubnetBtgApi
+      RouteTableId: !Ref RouteTableBtgApi
+
+  SecurityGroupBtgApi:
+    Type: "AWS::EC2::SecurityGroup"
+    Properties:
+      GroupDescription: "Allow SSH and HTTP"
+      VpcId: !Ref VpcBtgApi
+      SecurityGroupIngress:
+        - IpProtocol: "tcp"
+          FromPort: "22"
+          ToPort: "22"
+          CidrIp: "0.0.0.0/0"
+        - IpProtocol: "tcp"
+          FromPort: "80"
+          ToPort: "80"
+          CidrIp: "0.0.0.0/0"
+
+  EC2InstanceBtgApi:
+    Type: "AWS::EC2::Instance"
+    Properties:
+      InstanceType: "t2.micro"
+      KeyName: "kp-btg-challenge"  
+      ImageId: "ami-04a81a99f5ec58529" 
+      SubnetId: !Ref SubnetBtgApi
+      SecurityGroupIds:
+        - !Ref SecurityGroupBtgApi
+      UserData: 
+        Fn::Base64: |
+          #!/bin/bash -ex
+          
+          sudo apt update -y
+          sudo apt install -y git
+          sudo apt install python3.12-venv -y
+          sudo apt install -y python3-pip nginx
+          git clone https://github.com/gioakol/BTG-Back-challenge.git /home/ubuntu/BTG-Back-challenge
+          cd /home/ubuntu/BTG-Back-challenge
+          sudo python3 -m venv venv
+          source venv/bin/activate
+          pip install fastapi uvicorn boto3 python-dotenv pydantic pytest httpx
+
+          TOKEN=$(curl -s -X PUT "http://169.254.169.254/latest/api/token" -H "X-aws-ec2-metadata-token-ttl-seconds: 21600")
+
+          ACCOUNT_ID=$(curl -s -H "X-aws-ec2-metadata-token: $TOKEN" http://169.254.169.254/latest/meta-data/identity-credentials/ec2/info | grep "AccountId" | awk -F\" '{print $4}')
+          PUBLIC_IPV4=$(curl -s -H "X-aws-ec2-metadata-token: $TOKEN" http://169.254.169.254/latest/meta-data/public-ipv4)
+                    
+          echo 'server {
+              listen 80;
+              server_name '"$PUBLIC_IPV4"';
+              location / {
+                  proxy_pass http://127.0.0.1:8000;
+              }
+          }' | sudo tee /etc/nginx/sites-enabled/fastapi_nginx > /dev/null
+          
+          echo 'AWS_ACCESS_KEY_ID=
+          AWS_SECRET_ACCESS_KEY=
+          REGION_NAME=' | sudo tee /home/ubuntu/BTG-Back-challenge/.env > /dev/null
+
+          sudo service nginx restart
+          
+      Tags:
+        - Key: "Name"
+          Value: "EC2InstanceBtgApi"
+
+Outputs:
+  InstancePublicIp:
+    Description: "Public IP address of the EC2 instance"
+    Value: !GetAtt EC2InstanceBtgApi.PublicIp
