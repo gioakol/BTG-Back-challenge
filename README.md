@@ -44,8 +44,6 @@ Para instalar y configurar el entorno de desarrollo, sigue los siguientes pasos:
     ```bash
     uvicorn main:app --reload --env-file=".env"
 
-
-
 ## Instalación
 Para realizar la instalación en un ambiente productivo/pruebas, asegúrate de seguir estos pasos:
 
