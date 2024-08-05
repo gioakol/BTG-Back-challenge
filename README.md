@@ -94,7 +94,8 @@ El proyecto está organizado de la siguiente manera:
 
 ## Infraestructura Cloud
 
-![image](https://github.com/user-attachments/assets/a215636f-e24a-466d-8eb3-2767d55d7e4d)
+![image](https://github.com/user-attachments/assets/e8b63334-976e-490e-a49a-0196fed6fcf3)
+
 
 ## Licencia
 Este proyecto está licenciado bajo la Licencia MIT. Consulta el archivo LICENSE para más detalles.
