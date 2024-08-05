@@ -96,6 +96,9 @@ El proyecto está organizado de la siguiente manera:
 
 ![image](https://github.com/user-attachments/assets/e8b63334-976e-490e-a49a-0196fed6fcf3)
 
+## Base de datos
+
+![image](https://github.com/user-attachments/assets/b8974cf2-16f6-47ff-94c5-44d6740a98ac)
 
 ## Licencia
 Este proyecto está licenciado bajo la Licencia MIT. Consulta el archivo LICENSE para más detalles.
