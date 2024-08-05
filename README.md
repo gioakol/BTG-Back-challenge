@@ -37,15 +37,31 @@ Para instalar y configurar el entorno de desarrollo, sigue los siguientes pasos:
     ```bash
     pip install -r requirements.txt
 
-## Instalación
-Para ejecutar la aplicación localmente, asegúrate de tener todas las dependencias instaladas y sigue estos pasos:
+4. Ejecución dev
+    ```bash
+    uvicorn main:app --reload --env-file=".env"
 
-1. **Configura las variables de entorno necesarias:**
-Asegúrate de tener configuradas las credenciales de AWS y cualquier otra variable de entorno necesaria para la aplicación.
+
+
+## Instalación
+Para realizar la instalación en un ambiente productivo/pruebas, asegúrate de seguir estos pasos:
+
+1. Crear VM en EC2 Linux
+2. Instalar todas las dependencias en la VM
+    ```bash
+    sudo apt update
+    sudo apt install nginx
+    sudo apt install python3.12-venv
+    
+3. Inciar entorno virtual
+    ```bash
+    python3 -m venv venv
+    source venv/bin/activate
+    pip3 install -r requirements.txt
 
 2. **Ejecuta la aplicación:**
     ```bash
-    python app.py
+    uvicorn main:app --reload --env-file=".env"
 
 ## Estructura del Proyecto
 El proyecto está organizado de la siguiente manera:

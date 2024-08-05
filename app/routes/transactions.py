@@ -5,7 +5,7 @@ from app.models.transaction import Transaction
 routes_transactions = APIRouter()
 
 
-@routes_transactions.post("/suscribe", response_model=Transaction)
+@routes_transactions.post("/subscribe", response_model=Transaction)
 def suscribe(transaction: Transaction):
     return createTransaction(transaction)
 

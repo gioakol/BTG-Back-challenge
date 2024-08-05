@@ -61,8 +61,18 @@ def validateSubscribe(idClient: str):
             SUBSCRIPTIONS = response["Subscriptions"]
 
             result = list(filter(lambda subs: subs["Endpoint"] == EMAIL, SUBSCRIPTIONS))
+            
+            print (result)
 
-            return JSONResponse(result, status_code = 200)
+            if result:  
+                item = result[0].get('SubscriptionArn')
+
+                if item != 'PendingConfirmation':
+                    return JSONResponse(True, status_code = 200)
+                else:
+                    return JSONResponse(False, status_code = 200)
+            else: 
+                return JSONResponse(False, status_code = 200)
         else:
             return JSONResponse(content={"message": "El cliente al que intenta acceder no se encuentra."}, status_code=404)
     except ClientError as ex:
