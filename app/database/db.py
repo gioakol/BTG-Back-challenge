@@ -78,7 +78,7 @@ def Insert_Table_Clients():
         clients = {
             'idClient': '1', 
             'fullName': 'Giovanni Beltran Avila', 
-            'email': 'gioakol@gmail.com',
+            'email': 'gioakoltest@outlook.com',
             'phone': '+57 3229702531',
             'amount': 500000
         }
