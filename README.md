@@ -23,8 +23,8 @@ Challenge diseñado para validar conocimientos técnicos en python y AWS, por el
   - **AWS CloudFormation:** Herramienta para gestionar y aprovisionar recursos en la nube mediante plantillas en formato JSON o YAML.
   - **AWS EC2:** Servidores virtuales en la nube para ejecutar aplicaciones con configuración y escalabilidad flexible.
 
-## Instalación
-Para instalar y configurar el entorno de desarrollo, sigue los siguientes pasos:
+## Configuración entorno desarrollo
+Para configurar el entorno de desarrollo, sigue los siguientes pasos:
 
 1. **Clona el repositorio:**
     ```bash
@@ -41,26 +41,6 @@ Para instalar y configurar el entorno de desarrollo, sigue los siguientes pasos:
     pip install -r requirements.txt
 
 4. Ejecución dev
-    ```bash
-    uvicorn main:app --reload --env-file=".env"
-
-## Instalación
-Para realizar la instalación en un ambiente productivo/pruebas, asegúrate de seguir estos pasos:
-
-1. Crear VM en EC2 Linux
-2. Instalar todas las dependencias en la VM
-    ```bash
-    sudo apt update
-    sudo apt install nginx
-    sudo apt install python3.12-venv
-    
-3. Inciar entorno virtual
-    ```bash
-    python3 -m venv venv
-    source venv/bin/activate
-    pip3 install -r requirements.txt
-
-2. **Ejecuta la aplicación:**
     ```bash
     uvicorn main:app --reload --env-file=".env"
 
