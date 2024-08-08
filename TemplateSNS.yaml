@@ -1,0 +1,17 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: Template to create an SNS topic for BTG notifications
+
+Resources:
+  SnsBtgNotification:
+    Type: 'AWS::SNS::Topic'
+    Properties:
+      TopicName: 'sns-btg-notification'
+      DisplayName: 'BTG Pactual'
+      Tags:
+        - Key: 'Type'
+          Value: 'Standard'
+
+Outputs:
+  SnsBtgNotificationARN:
+    Description: 'ARN of the SNS topic for BTG notifications'
+    Value: !Ref SnsBtgNotification

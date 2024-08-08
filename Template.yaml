@@ -73,11 +73,16 @@ Resources:
           ToPort: "80"
           CidrIp: "0.0.0.0/0"
 
+  EC2KeyPairBtgApi:
+    Type: "AWS::EC2::KeyPair"
+    Properties:
+      KeyName: "kp-btg-challenge"
+
   EC2InstanceBtgApi:
     Type: "AWS::EC2::Instance"
     Properties:
       InstanceType: "t2.micro"
-      KeyName: "kp-btg-challenge"  
+      KeyName: !Ref EC2KeyPairBtgApi
       ImageId: "ami-04a81a99f5ec58529" 
       SubnetId: !Ref SubnetBtgApi
       SecurityGroupIds:
@@ -109,9 +114,11 @@ Resources:
               }
           }' | sudo tee /etc/nginx/sites-enabled/fastapi_nginx > /dev/null
           
-          echo 'AWS_ACCESS_KEY_ID=
+          echo 'CORS_ORIGIN=
+          AWS_ACCESS_KEY_ID=
           AWS_SECRET_ACCESS_KEY=
-          REGION_NAME=' | sudo tee /home/ubuntu/BTG-Back-challenge/.env > /dev/null
+          REGION_NAME=us-east-1
+          AWS_MAIL_TOPIC_ARN=' | sudo tee /home/ubuntu/BTG-Back-challenge/.env > /dev/null
 
           sudo service nginx restart
           
